@@ -39,5 +39,9 @@
       "skill": "dashboard",
       "service": "api"
     }
+  },
+  "database": {
+    "name": "dashboard-data",
+    "migrations": "database/migrations"
   }
 }
