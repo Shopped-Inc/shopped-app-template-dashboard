@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard</title>
+    <script type="importmap">
+      { "imports": { "@shopped/app-runtime": "/a/_runtime/v4/@shopped/app-runtime.js" } }
+    </script>
+    <link rel="stylesheet" href="./app.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body data-surface="standalone">
+    <main class="page">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">Operations</p>
+          <h1>Dashboard</h1>
+          <p class="subtitle">A live view of today's workload and service health.</p>
+        </div>
+        <button id="refresh" class="button" type="button">Refresh</button>
+      </header>
+      <p id="session" class="session-line"></p>
+      <button id="session-action" class="button" type="button" hidden>Sign in with Shopped</button>
+      <div id="status" class="status" role="status" aria-live="polite">Loading…</div>
+      <section class="metrics" aria-label="Key metrics">
+        <article class="metric"><span>Open work</span><strong data-field="openWork">—</strong></article>
+        <article class="metric"><span>Completed today</span><strong data-field="completedToday">—</strong></article>
+        <article class="metric"><span>On-time rate</span><strong data-field="onTimeRate">—</strong></article>
+      </section>
+      <section class="panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">Recent activity</p><h2>Latest updates</h2></div>
+          <span data-field="updatedAt">—</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Work item</th><th>Status</th><th>Owner</th></tr></thead>
+            <tbody id="activity"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

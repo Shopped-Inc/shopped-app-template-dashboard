@@ -1,0 +1,5 @@
+{
+  "start": "node index.mjs",
+  "port": 8080,
+  "healthPath": "/healthz"
+}

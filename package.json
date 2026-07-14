@@ -1,0 +1,8 @@
+{
+  "name": "shopped-dashboard-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/validate.mjs"
+  }
+}

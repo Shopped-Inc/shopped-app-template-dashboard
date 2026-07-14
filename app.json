@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "dashboard",
+  "title": "Dashboard",
+  "icon": "ChartBar",
+  "ownerSkill": "dashboard",
+  "frontend": {
+    "kind": "static",
+    "entry": "web/index.html"
+  },
+  "surfaces": [
+    {
+      "id": "main",
+      "kind": "standalone",
+      "title": "Dashboard",
+      "entry": "web/index.html"
+    },
+    {
+      "id": "summary-card",
+      "kind": "card",
+      "title": "Dashboard summary",
+      "entry": "web/card.html"
+    },
+    {
+      "id": "status-widget",
+      "kind": "widget",
+      "title": "Dashboard status",
+      "entry": "web/widget.html"
+    }
+  ],
+  "services": {
+    "api": {
+      "path": "services/api"
+    }
+  },
+  "dataSources": {
+    "api": {
+      "type": "service",
+      "skill": "dashboard",
+      "service": "api"
+    }
+  }
+}
