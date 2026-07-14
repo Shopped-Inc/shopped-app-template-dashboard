@@ -1,0 +1,14 @@
+{
+  "name": "shopped-dashboard-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "dependencies": {
+    "postgres": "3.4.9"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

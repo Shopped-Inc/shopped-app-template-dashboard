@@ -3,14 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
     <title>Dashboard</title>
     <script type="importmap">
-      { "imports": { "@shopped/app-runtime": "/a/_runtime/v4/@shopped/app-runtime.js" } }
+      { "imports": { "react": "/a/_runtime/v4/react.js", "react-dom/client": "/a/_runtime/v4/react-dom-client.js", "@shopped/app-runtime": "/a/_runtime/v4/@shopped/app-runtime.js" } }
     </script>
     <link rel="stylesheet" href="./app.css" />
     <script type="module" src="./app.js"></script>
   </head>
   <body data-surface="standalone">
+    <div id="app-root">
     <main class="page">
       <header class="page-header">
         <div>
@@ -22,11 +25,12 @@
       </header>
       <p id="session" class="session-line"></p>
       <button id="session-action" class="button" type="button" hidden>Sign in with Shopped</button>
-      <div id="status" class="status" role="status" aria-live="polite">Loading…</div>
+      <div id="status" class="status" role="status" aria-live="polite">Loading live data…</div>
       <section class="metrics" aria-label="Key metrics">
-        <article class="metric"><span>Open work</span><strong data-field="openWork">—</strong></article>
-        <article class="metric"><span>Completed today</span><strong data-field="completedToday">—</strong></article>
-        <article class="metric"><span>On-time rate</span><strong data-field="onTimeRate">—</strong></article>
+        <article class="metric"><span>Open work</span><strong data-field="openWork">18</strong></article>
+        <article class="metric"><span>Completed today</span><strong data-field="completedToday">42</strong></article>
+        <article class="metric"><span>On-time rate</span><strong data-field="onTimeRate">94%</strong></article>
+        <article class="metric"><span>Recorded refreshes</span><strong data-field="refreshCount">0</strong></article>
       </section>
       <section class="panel">
         <div class="panel-heading">
@@ -36,10 +40,15 @@
         <div class="table-wrap">
           <table>
             <thead><tr><th>Work item</th><th>Status</th><th>Owner</th></tr></thead>
-            <tbody id="activity"></tbody>
+            <tbody id="activity">
+              <tr><td>Morning fulfillment wave</td><td>Complete</td><td>Operations</td></tr>
+              <tr><td>Inventory exception review</td><td>In progress</td><td>Merchandising</td></tr>
+              <tr><td>Carrier handoff</td><td>On track</td><td>Logistics</td></tr>
+            </tbody>
           </table>
         </div>
       </section>
     </main>
+    </div>
   </body>
 </html>

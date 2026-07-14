@@ -3,26 +3,31 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
     <title>Dashboard summary</title>
     <script type="importmap">
-      { "imports": { "@shopped/app-runtime": "/a/_runtime/v4/@shopped/app-runtime.js" } }
+      { "imports": { "react": "/a/_runtime/v4/react.js", "react-dom/client": "/a/_runtime/v4/react-dom-client.js", "@shopped/app-runtime": "/a/_runtime/v4/@shopped/app-runtime.js" } }
     </script>
     <link rel="stylesheet" href="./app.css" />
     <script type="module" src="./app.js"></script>
   </head>
   <body data-surface="card">
+    <div id="app-root">
     <main class="compact-surface">
       <header class="compact-header">
         <div><p class="eyebrow">Operations</p><h1>Today's work</h1></div>
         <button id="refresh" class="button button-small" type="button">Refresh</button>
       </header>
-      <div id="status" class="status" role="status" aria-live="polite">Loading…</div>
+      <div id="status" class="status" role="status" aria-live="polite">Loading live data…</div>
       <section class="metrics metrics-compact" aria-label="Key metrics">
-        <article class="metric"><span>Open</span><strong data-field="openWork">—</strong></article>
-        <article class="metric"><span>Done</span><strong data-field="completedToday">—</strong></article>
-        <article class="metric"><span>On time</span><strong data-field="onTimeRate">—</strong></article>
+        <article class="metric"><span>Open</span><strong data-field="openWork">18</strong></article>
+        <article class="metric"><span>Done</span><strong data-field="completedToday">42</strong></article>
+        <article class="metric"><span>On time</span><strong data-field="onTimeRate">94%</strong></article>
+        <article class="metric"><span>Refreshes</span><strong data-field="refreshCount">0</strong></article>
       </section>
       <p class="updated">Updated <span data-field="updatedAt">—</span></p>
     </main>
+    </div>
   </body>
 </html>
