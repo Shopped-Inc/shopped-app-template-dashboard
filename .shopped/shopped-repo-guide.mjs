@@ -913,9 +913,9 @@ function parseAppManifest(input, options = {}) {
 var REPO_AGENT_GUIDE_BUNDLE = {
   "metadata": {
     "version": 3,
-    "sourceSha": "5437492e590358d1375e633b7dd12462ace7cbc2",
-    "digest": "423904d649c7775744913a488df708e044338d994fac9d485d69aa5df60622cd",
-    "contractDigest": "1819b9577269cb7cecf06ddcd613f7a6686382454bf2a430313364072b9195c3",
+    "sourceSha": "a1dbe7ed49f3c7b12afb1a1e406699f0a95d6870",
+    "digest": "536caff70bdff9f5c2c90581321ff30f946cc8a032dbae18c9cefdadcce169ec",
+    "contractDigest": "cd20aec7205423d787dbba30d9e538ae0c9ddb9ee85c68ec5688ba8e506dd447",
     "managedFiles": {
       ".shopped/agent-guide.md": "7c17dd47396d5b912c102d15f713689a36fa1173b8d770e2ca453ad7e4751c56",
       ".claude/skills/shopped-hosting/SKILL.md": "ca0800978204248d15d84d69ed88ad5076b4edac62e910bedf456d6a0d83285a"
@@ -1636,14 +1636,15 @@ async function runRepoGuide(args, emit = console.log) {
   const value = (flag, fallback) => {
     const i = args.indexOf(flag);
     if (i < 0) return fallback;
-    if (!args[i + 1] || args[i + 1].startsWith("--")) throw new Error(`${flag} needs a value`);
+    if (args[i + 1] === void 0 || args[i + 1].startsWith("--")) throw new Error(`${flag} needs a value`);
     return args[i + 1];
   };
   const root = resolve(value("--root", "."));
   const subdir = guideRoot(value("--subdir", ""));
   if (command === "contract") {
     const result = checkRepoContract(root, value("--manifest", guidePath(subdir, "app.json")), emit);
-    if (args.includes("--lint")) lintTree(root, guideRoot(value("--lint", subdir)), emit);
+    const lintDirectory = value("--lint", "");
+    if (lintDirectory) lintTree(root, guideRoot(lintDirectory), emit);
     return result;
   }
   if (!["init", "update", "check"].includes(command ?? "")) throw new Error("Use init|update|check|contract [--root repo] [--subdir app] [--write]");
