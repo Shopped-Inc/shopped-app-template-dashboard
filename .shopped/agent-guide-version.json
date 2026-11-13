@@ -1,8 +1,8 @@
 {
   "version": 3,
-  "sourceSha": "31ab78828b8f124f2e511816fe04f4d8421a6cd6",
-  "digest": "a26a943722537a30b12d6bb8a0e8f72fbe8cc62dcdd1c9bc4757effc33b29211",
-  "contractDigest": "1fb203c56c2dc8bd2ad6ad9378491131c7dfb7af027dcc12ec38c74d9feccb33",
+  "sourceSha": "fb81347280ea2232be278a89a5c2e2a0da396b52",
+  "digest": "871c013b14857324348bdf74bd80bae1d4df509ca5c4725b1f6c3a8f458eb409",
+  "contractDigest": "1819b9577269cb7cecf06ddcd613f7a6686382454bf2a430313364072b9195c3",
   "managedFiles": {
     ".shopped/agent-guide.md": "7c17dd47396d5b912c102d15f713689a36fa1173b8d770e2ca453ad7e4751c56",
     ".claude/skills/shopped-hosting/SKILL.md": "ca0800978204248d15d84d69ed88ad5076b4edac62e910bedf456d6a0d83285a"
