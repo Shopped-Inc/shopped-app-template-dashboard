@@ -91,8 +91,8 @@ for (const kind of ['standalone', 'card', 'widget']) {
 if (manifest.database?.name !== 'dashboard-data') {
   throw new Error('app.json must declare the dashboard-data managed database')
 }
-if (manifest.database.migrations !== 'database/migrations') {
-  throw new Error('app.json database.migrations must point to database/migrations')
+if ('migrations' in manifest.database) {
+  throw new Error('Publication does not execute repository SQL; database.migrations is not supported')
 }
 if (manifest.services?.api?.path !== 'services/api') {
   throw new Error('app.json must bind the api service from services/api')
@@ -129,15 +129,16 @@ for (const operation of ['INSERT INTO dashboard_state', 'SELECT open_work', 'UPD
   }
 }
 
-const migrations = (await readdir('database/migrations'))
+// Onboarding SQL is reviewed owner input, never a publish-time migration source.
+const migrations = (await readdir('database/onboarding'))
   .filter(name => name.endsWith('.sql'))
   .sort()
-if (migrations.length === 0) throw new Error('At least one immutable SQL migration is required')
+if (migrations.length === 0) throw new Error('At least one reviewed onboarding SQL input is required')
 for (const name of migrations) {
   if (!/^\d{3}_[a-z0-9_]+\.sql$/.test(name)) {
     throw new Error(`Migration ${name} must use a sortable immutable filename`)
   }
-  const sql = await readFile(`database/migrations/${name}`, 'utf8')
+  const sql = await readFile(`database/onboarding/${name}`, 'utf8')
   if (countSqlStatements(sql) !== 1) {
     throw new Error(`Migration ${name} must contain exactly one SQL statement`)
   }
