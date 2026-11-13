@@ -1,4 +1,4 @@
-<!-- SHOPPED-HOSTING:BEGIN version=2 -->
+<!-- SHOPPED-HOSTING:BEGIN version=3 -->
 ## Shopped hosting — read before app changes
 Read `.shopped/agent-guide.md` and customer facts/test commands in
 `docs/SHOPPED-HOSTING.md`; Claude Code also has the repo-local hosting skill.
@@ -10,6 +10,7 @@ Read `.shopped/agent-guide.md` and customer facts/test commands in
 - Test nested mounted and no-base modes; synthetic identity only in tests.
 - Flag migrations in the PR title; one compatible revision chained to main's head.
   App-owned history never uses database_migration_*.
-- PR → CI/review → authorized merge → authorized exact-SHA publication;
-  merge is not deployment. Never perform owner-only operations without approval.
+- PR → CI/review → authorized exact-SHA release. Check auto-deploy before merge:
+  when enabled, merging can publish. Complete owner prerequisites first; never
+  perform owner-only operations or a production-deploying merge without approval.
 <!-- SHOPPED-HOSTING:END -->

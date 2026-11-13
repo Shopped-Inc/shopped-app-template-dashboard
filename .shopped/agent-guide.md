@@ -87,9 +87,10 @@ in `docs/SHOPPED-HOSTING.md`. Limits below are generated from platform code.
   that hazard; prefer tested compatible-revision acceptance where supported.
 - Close clean read transactions before slow provider calls (SELECT starts one
   too). Preserve atomic writes and test disposable Postgres, not only SQLite.
-- Branch → tests → PR → current-head CI/review → authorized merge → authorized
-  exact bound branch-head SHA publication. Merge is not deployment. Report
-  merged/activated SHAs separately; don't enable auto-deploy as a repair.
+- Branch → tests → PR → current-head CI/review → authorized publication of the
+  exact bound branch-head SHA. If auto-deploy is enabled, a merge can publish.
+  Complete owner prerequisites and deployment authorization before that merge.
+  Report merged/activated SHAs separately; never enable auto-deploy as a repair.
 - Before PR: state revision/compatibility/restart policy, env count/secret names,
   public/CSP and resources/storage changes (or explicitly none).
 

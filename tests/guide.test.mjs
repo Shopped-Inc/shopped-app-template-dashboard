@@ -11,7 +11,7 @@ const quiet = () => {}
 
 test('template seeds discoverable managed guidance and matching versioned bytes', async () => {
   const metadata = JSON.parse(await readFile('.shopped/agent-guide-version.json', 'utf8'))
-  assert.equal(metadata.version, 2)
+  assert.equal(metadata.version, 3)
   for (const [path, expected] of Object.entries(metadata.managedFiles)) {
     const content = await readFile(path, 'utf8')
     assert.equal(createHash('sha256').update(content).digest('hex'), expected, path)
@@ -19,7 +19,9 @@ test('template seeds discoverable managed guidance and matching versioned bytes'
   }
   for (const path of ['AGENTS.md', 'CLAUDE.md']) {
     const content = await readFile(path, 'utf8')
-    assert.match(content, /SHOPPED-HOSTING:BEGIN version=2/)
+    assert.match(content, /SHOPPED-HOSTING:BEGIN version=3/)
+    assert.match(content, /merging can publish/)
+    assert.doesNotMatch(content, /merge is not deployment/i)
     assert.match(content, /\.shopped\/agent-guide\.md/)
     assert.equal(content.match(/^- /gm).length, 8)
   }
