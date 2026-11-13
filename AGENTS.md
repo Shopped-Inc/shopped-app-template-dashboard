@@ -1,4 +1,4 @@
-<!-- SHOPPED-HOSTING:BEGIN version=1 -->
+<!-- SHOPPED-HOSTING:BEGIN version=2 -->
 ## Shopped hosting — read before app changes
 Read `.shopped/agent-guide.md` and customer facts/test commands in
 `docs/SHOPPED-HOSTING.md`; Claude Code also has the repo-local hosting skill.

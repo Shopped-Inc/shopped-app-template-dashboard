@@ -18,8 +18,9 @@ After generating a repository from this template:
    create/apply the baseline through that database system, then set
    `database.minimumMigration` to the applied migration's stable slug.
    Never add a second ledger to a database with app-owned migration history.
-4. Run `npm test`, exercise all three pages locally with `?demo=1`, then publish
-   the exact tested commit through Shopped.
+4. Run `npm test`, exercise all three pages locally with `?demo=1`, then hand
+   the exact tested SHA and database prerequisites to the owner for authorized
+   publication through Shopped.
 
 Each page ships meaningful semantic HTML for static-first paint, then
 progressively enhances with the real platform `Page`, `Card`, `MetricCard`,

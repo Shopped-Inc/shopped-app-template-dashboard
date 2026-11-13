@@ -912,10 +912,10 @@ function parseAppManifest(input, options = {}) {
 // repo-agent-guide.generated.ts
 var REPO_AGENT_GUIDE_BUNDLE = {
   "metadata": {
-    "version": 1,
-    "sourceSha": "9fceb60298d498eeccf3bf34ba0d99d81e64b380",
-    "digest": "20e42c627da048353cf84354874572ce73ad35b388568cdc6fb5ea4d301c7bed",
-    "contractDigest": "4ceb16063d4d4b95aae9d7de1e1b828f3157cf162b6057157817ff9997724a6b",
+    "version": 2,
+    "sourceSha": "31ab78828b8f124f2e511816fe04f4d8421a6cd6",
+    "digest": "8b9def3119bf6ff935bda3e4dedbdbec95736d9179d2c836a24b949c2637f30d",
+    "contractDigest": "e9142752133a38b10534f31ec5df4d8ea94ff3002a9e0e0d071b8f717f8a81a0",
     "managedFiles": {
       ".shopped/agent-guide.md": "7ed98d14c89af95bbb8509e8f77acc0db2d03004a54ffc8c76c755743bb20f6a",
       ".claude/skills/shopped-hosting/SKILL.md": "ca0800978204248d15d84d69ed88ad5076b4edac62e910bedf456d6a0d83285a"
@@ -925,7 +925,7 @@ var REPO_AGENT_GUIDE_BUNDLE = {
     ".shopped/agent-guide.md": "# Developing a Git-backed Shopped app\n\nGeneric contract; customer paths, test commands and migration authority belong\nin `docs/SHOPPED-HOSTING.md`. Limits below are generated from platform code.\n\n## Source and runtime\n- Keep executable source in the bound repo, not a second workspace copy.\n  `app.json` version 1 owns frontends, surfaces, services and logical databases.\n- Normalized manifest fields: `capabilities`, `compatibility`, `dataSources`, `database`, `deploy`, `frontend`, `icon`, `id`, `ownerSkill`, `services`, `surfaces`, `title`, `version`.\n- Resolve frontend entries from the manifest directory; services from the binding\n  root. Preserve the framework; don't rewrite it to evade host limits.\n- Server frontends have `service.json` beside their entry; listen on injected\n  PORT, keep health inert/fast, and authenticate before private handlers.\n- Keep locked dependencies in the persisted repository environment, not a\n  build-container home. Separate install from build when supported.\n\n## Browser URLs and identity\n- Resolve browser URLs below the injected base href, never the origin root.\n  Root links, fetch('/api'), CSS url(/...), srcset, history and router basenames\n  escape the mount. Use relative build output and runtime-base-aware helpers.\n- Backend requests arrive mount-stripped. DOM rewriting cannot fix preloads.\n  Use path-only self redirects, not absolute URLs built from upstream Host\n  (which may be app-backend.internal). Test mount/slash redirects.\n- Use SDK fetch/data APIs; native fetch lacks embed credentials. Never call\n  the private service origin directly from browser code.\n- The authenticated proxy strips cookies/Authorization and app Set-Cookie.\n  Trust X-Shopped-Identity and X-Shopped-Identity-Sig only behind that proxy.\n  Base64 JSON has userId, workspaceId, role and millisecond exp, not email;\n  optional app-scope claims may also exist. Validate fields/expiry, scope data\n  by workspace and fail closed without identity. Never infer client email.\n- Prefer SDK session.signIn for standalone sign-in. Embedded shells are public\n  and inert so the parent can bootstrap; private data/actions require identity.\n  Do not start OAuth in an iframe or add a runtime identity bypass.\n- Sandbox preview identity requires the supported workspace-member sign-in flow;\n  anonymous/direct-loopback requests have no identity. Synthetic identity is\n  for test transports only, never a public dev-server bypass.\n- service.json public paths (at most 32 per list) are explicit prefixes:\n  /mcp also covers /mcp/x, not /mcpx. Public calls have identity stripped and\n  need app-owned auth. Never widen a prefix to repair UI URLs; test each hostname.\n\n## Browser policy and cache\n- The viewer owns CSP. frontend.csp supports only `fontSrc`/`styleSrc`:\n  up to 8 exact HTTPS origins per list, no wildcards/paths/IPs/keywords.\n  Vendor scripts; these fields cannot open external script/fetch connections.\n  HTTPS images/audio/video are already allowed, including media redirects.\n- Server responses default no-store. Eligible successful GET/HEAD assets on\n  isolated origins can opt in with positive max-age, no identity/Set-Cookie\n  headers and Vary absent or only Accept-Encoding. The viewer clamps to\n  86400 seconds, private, must-revalidate; shared/CDN caching stays disabled.\n  HTML/JSON/APIs remain no-store. Never cache personal data as an asset.\n- Hash/version asset URLs when bytes change. Strip incidental cookies only from\n  non-personal assets: cached bytes can outlive sign-out until expiry.\n\n## Env, storage and jobs\n- service.json env has at most 64 entries. Reserved injected names:\n  `DATABASE_URL`, `DATABASE_URL_PSYCOPG`, `PORT`, `SHOPPED_*`. Count total and per-environment entries before adding any.\n- Declare literal strings or secret names, never secret values. List new vars\n  and secret names in the PR for the owner; new values require a republish.\n  Missing required config blocks release; do not invent optional syntax.\n- Disk is ephemeral unless supported persistentData is enabled. Put durable\n  service files on /data, not scratch; overlapping releases share the volume.\n  Keep files compatible and arrange backups: a volume is not a backup.\n- Review resources/storage with the owner. alwaysOn prevents idle freezing for\n  scheduled work and consumes continuous capacity; request-only apps may not need it.\n- Scheduled jobs check SHOPPED_SERVICE_LIVE_FILE (/run/shopped/live) before jobs\n  and between batches. Healthy candidates aren't live. Keep effects idempotent\n  or use leases; marker checks do not cancel in-flight calls. Request-spawned\n  work must honor the app's kill switch where provided.\n\n## Migrations and releases\n- Record the database's single migration authority in the customer runbook.\n  If app-owned, never use database_migration_*: an independent tool ledger\n  diverges from the app history. Do not switch an established authority casually.\n- Current publication does not execute repository migrations. The owner applies\n  them before publish. App-owned migrations work may change this contract;\n  follow shipped behavior for this app, not proposed automation.\n- Keep migrations compatible with the still-running release: apply precedes\n  publish and releases overlap. Expand first with nullable columns/new tables;\n  remove/rename only in a later contract release.\n- Add one revision per schema PR, chained to main's current head; rebase if it\n  moved. Never edit applied history. Flag the revision in the PR title, update\n  head assertions and test indexes/constraints/grants with disposable Postgres.\n- Runtime credentials read/write data, not schema. Do not add startup DDL or\n  use an owner credential to bypass a failed upgrade.\n- Check startup revision policy. Exact equality to bundled head prevents old\n  releases restarting or pre-migration rollback booting after migration. Flag\n  that hazard; prefer tested compatible-revision acceptance where supported.\n- Close clean read transactions before slow provider calls (SELECT starts one\n  too). Preserve atomic writes and test disposable Postgres, not only SQLite.\n- Branch \u2192 tests \u2192 PR \u2192 current-head CI/review \u2192 authorized merge \u2192 authorized\n  exact bound branch-head SHA publication. Merge is not deployment. Report\n  merged/activated SHAs separately; don't enable auto-deploy as a repair.\n- Before PR: state revision/compatibility/restart policy, env count/secret names,\n  public/CSP and resources/storage changes (or explicitly none).\n\n## Proof without platform access\n- Use fixtures for nested mount/query/hash, masked Host, stripped backend paths,\n  missing/expired synthetic identity rejection, no-base localhost, cache/public\n  paths and disposable schema cases. Stub providers and disable schedulers.\n- Local tests don't prove real sign-in/ingress/activation; the owner checks those\n  after publication. Never perform owner-only operations without approval.\n",
     ".claude/skills/shopped-hosting/SKILL.md": "---\nname: shopped-hosting\ndescription: Develop a Git-backed Shopped app. Use for routing/assets, auth/public paths, CSP/cache, service env/secrets/storage/resources, jobs, schema work, releases and hosted-only regressions, even when localhost works.\n---\nRead the repo entry point, `.shopped/agent-guide.md` and customer hosting facts\nin `docs/SHOPPED-HOSTING.md`. Add a failing local regression for the affected\ncontract. Exercise nested mounts and no-base localhost, including absent/expired\nidentity rejection. Synthetic identity belongs only in test fixtures.\nRun the contract checker and application CI, including disposable database tests.\nComplete the customer pre-PR checklist: revision and compatible parent, env count\nand new secret names, public/CSP and resource/storage changes. Flag migrations\nand restart/rollback hazards to the owner. Report the tested SHA and owner\nprerequisites, not a deploy. Never perform owner operations without approval.\n"
   },
-  "entry": "<!-- SHOPPED-HOSTING:BEGIN version=1 -->\n## Shopped hosting \u2014 read before app changes\nRead `.shopped/agent-guide.md` and customer facts/test commands in\n`docs/SHOPPED-HOSTING.md`; Claude Code also has the repo-local hosting skill.\n- Keep browser paths below the injected base/mount, not the origin root.\n- Use platform identity; don't invent hosted cookie sessions or email claims.\n- Keep secret values out of Git; list env/secret names for the owner.\n- Preserve manifest CSP, public-path boundaries and opt-in non-personal caching.\n- Fence scheduled jobs for live-only execution; keep external effects idempotent.\n- Test nested mounted and no-base modes; synthetic identity only in tests.\n- Flag migrations in the PR title; one compatible revision chained to main's head.\n  App-owned history never uses database_migration_*.\n- PR \u2192 CI/review \u2192 authorized merge \u2192 authorized exact-SHA publication;\n  merge is not deployment. Never perform owner-only operations without approval.\n<!-- SHOPPED-HOSTING:END -->\n",
+  "entry": "<!-- SHOPPED-HOSTING:BEGIN version=2 -->\n## Shopped hosting \u2014 read before app changes\nRead `.shopped/agent-guide.md` and customer facts/test commands in\n`docs/SHOPPED-HOSTING.md`; Claude Code also has the repo-local hosting skill.\n- Keep browser paths below the injected base/mount, not the origin root.\n- Use platform identity; don't invent hosted cookie sessions or email claims.\n- Keep secret values out of Git; list env/secret names for the owner.\n- Preserve manifest CSP, public-path boundaries and opt-in non-personal caching.\n- Fence scheduled jobs for live-only execution; keep external effects idempotent.\n- Test nested mounted and no-base modes; synthetic identity only in tests.\n- Flag migrations in the PR title; one compatible revision chained to main's head.\n  App-owned history never uses database_migration_*.\n- PR \u2192 CI/review \u2192 authorized merge \u2192 authorized exact-SHA publication;\n  merge is not deployment. Never perform owner-only operations without approval.\n<!-- SHOPPED-HOSTING:END -->\n",
   "customer": "# Customer hosting facts\n\nOwner: fill in these facts before release. Generic rules are in\n`.shopped/agent-guide.md`; do not duplicate them here. No live IDs or secrets.\n\n- Effective app root and manifest:\n- Server entry, service roots and health path:\n- Browser base helpers and synthetic identity/mount fixtures:\n- Local focused/full CI commands (stub providers; disable external effects):\n- Disposable database test command:\n- Public host/alias \u2192 prefix map (identity stripped on public paths):\n- Auto-deploy state (verify manifest and binding allowance):\n- Single migration authority (app-owned histories forbid database_migration_*):\n- Migration apply timing and startup accepted revisions/restart/rollback policy:\n- Environment entry count, owner-provisioned secret names (never values):\n\n## Pre-PR checklist\n- Revision (flag in title), main's parent and backward compatibility:\n- Restart/rollback policy and owner prerequisites:\n- Resulting env count/limit and new secret names:\n- Public-path/CSP changes and regression tests:\n- Resources/storage changes and owner review:\n"
 };
 
@@ -957,6 +957,23 @@ function managedBlock(content) {
   }
   return { start, end: end + END.length, text: content.slice(start, end + END.length) };
 }
+function entryFile(files, root, name) {
+  let path = guidePath(root, name);
+  let file = files[path];
+  if (file?.mode === "120000") {
+    const target = file.content.replace(/^\.\//, "");
+    if (!["AGENTS.md", "CLAUDE.md"].includes(target) || target === name) throw new Error(`${path}: unsupported symlink; preserve and review manually`);
+    path = guidePath(root, target);
+    file = files[path];
+    if (file?.mode === "120000") throw new Error(`${path}: cyclic/indirect symlink`);
+  }
+  return { path, file };
+}
+function scopeLink(root) {
+  return `<!-- SHOPPED-HOSTING:LINK ${root} -->
+For the app in ${root}, read [its agent entry point](${root}/AGENTS.md).
+`;
+}
 function installedMetadata(files, root) {
   const file = files[guidePath(root, ".shopped/agent-guide-version.json")];
   if (!file) return null;
@@ -974,6 +991,18 @@ async function repoGuideWarning(files, root = "") {
       for (const [relative, expected] of Object.entries(REPO_AGENT_GUIDE_BUNDLE.metadata.managedFiles)) {
         const file = files[guidePath(root, relative)];
         if (!file || file.mode === "120000" || await hash(file.content) !== expected) valid = false;
+      }
+      const expectedEntry = REPO_AGENT_GUIDE_BUNDLE.entry.trimEnd();
+      const expectedEntryDigest = await hash(expectedEntry);
+      for (const name of ["AGENTS.md", "CLAUDE.md"]) {
+        const resolved = entryFile(files, root, name);
+        const block = resolved.file ? managedBlock(resolved.file.content) : null;
+        if (!block || block.text !== expectedEntry || metadata.entryDigests?.[resolved.path] !== expectedEntryDigest) valid = false;
+      }
+      if (root) {
+        const link = scopeLink(root);
+        const resolved = entryFile(files, "", "AGENTS.md");
+        if (!resolved.file?.content.includes(link) || metadata.rootLinkDigest !== await hash(link)) valid = false;
       }
       if (valid) return null;
     }
@@ -1008,23 +1037,9 @@ async function planRepoGuideUpdate(files, root = "") {
   }
   const entryDigests = {};
   for (const name of ["AGENTS.md", "CLAUDE.md"]) {
-    let path = guidePath(root, name);
-    let file = files[path];
-    if (file?.mode === "120000") {
-      const target = file.content;
-      if (!["AGENTS.md", "CLAUDE.md"].includes(target) || target === name) {
-        conflicts.push(`${path}: unsupported symlink; preserve and review manually`);
-        continue;
-      }
-      path = guidePath(root, target);
-      file = files[path];
-      if (file?.mode === "120000") {
-        conflicts.push(`${path}: cyclic/indirect symlink`);
-        continue;
-      }
-    }
-    if (writes.has(path)) continue;
     try {
+      const { path, file } = entryFile(files, root, name);
+      if (writes.has(path)) continue;
       const old = file?.content ?? "";
       const block = managedBlock(old);
       const entry = REPO_AGENT_GUIDE_BUNDLE.entry.trimEnd();
@@ -1035,35 +1050,33 @@ async function planRepoGuideUpdate(files, root = "") {
       const content = block ? old.slice(0, block.start) + entry + old.slice(block.end) : `${old}${old && !old.endsWith("\n") ? "\n" : ""}${old ? "\n" : ""}${entry}
 `;
       entryDigests[path] = await hash(entry);
-      if (content !== old) writes.set(path, { path, content, mode: file?.mode ?? "100644" });
+      if (content !== old) writes.set(path, { path, content, mode: file?.mode === "100755" ? "100755" : "100644" });
     } catch (error2) {
-      conflicts.push(`${path}: ${String(error2)}`);
+      conflicts.push(`${guidePath(root, name)}: ${String(error2)}`);
     }
   }
   const customerPath = guidePath(root, "docs/SHOPPED-HOSTING.md");
   if (!files[customerPath]) writes.set(customerPath, { path: customerPath, content: REPO_AGENT_GUIDE_BUNDLE.customer, mode: "100644" });
+  let rootLinkDigest;
   if (root) {
-    const path = "AGENTS.md";
-    const old = files[path];
-    const link = `<!-- SHOPPED-HOSTING:LINK ${root} -->
-For the app in ${root}, read [its agent entry point](${root}/AGENTS.md).
-`;
-    if (old?.mode === "120000") conflicts.push("Root AGENTS.md is a symlink; add the scoped app link manually");
-    else if (!old?.content.includes(`<!-- SHOPPED-HOSTING:LINK ${root} -->`)) writes.set(path, { path, content: `${old?.content ?? ""}
-${link}`, mode: old?.mode ?? "100644" });
+    try {
+      const { path, file } = entryFile(files, "", "AGENTS.md");
+      const link = scopeLink(root);
+      rootLinkDigest = await hash(link);
+      if (file?.content.includes(`<!-- SHOPPED-HOSTING:LINK ${root} -->`) && !file.content.includes(link)) conflicts.push(`${path}: scoped discovery link was edited; manual review required`);
+      else if (!file?.content.includes(link)) writes.set(path, { path, content: `${file?.content ?? ""}
+${link}`, mode: file?.mode === "100755" ? "100755" : "100644" });
+    } catch (error2) {
+      conflicts.push(String(error2));
+    }
   }
   const metadataPath = guidePath(root, ".shopped/agent-guide-version.json");
-  const metadata = JSON.stringify({ ...REPO_AGENT_GUIDE_BUNDLE.metadata, entryDigests }, null, 2) + "\n";
+  const metadata = JSON.stringify({ ...REPO_AGENT_GUIDE_BUNDLE.metadata, entryDigests, ...rootLinkDigest ? { rootLinkDigest } : {} }, null, 2) + "\n";
   if (files[metadataPath]?.content !== metadata) writes.set(metadataPath, { path: metadataPath, content: metadata, mode: "100644" });
   return { writes: conflicts.length ? [] : [...writes.values()], conflicts, version: REPO_AGENT_GUIDE_BUNDLE.metadata.version };
 }
 
-// ../app-worker/src/lib/d1-telemetry.ts
-import { AsyncLocalStorage } from "async_hooks";
-var d1StatsStore = new AsyncLocalStorage();
-var d1PhaseStore = new AsyncLocalStorage();
-
-// ../app-worker/src/lib/app-database-environment-bindings.ts
+// app-database-environments.ts
 var DEVELOPMENT_DATABASE_ENVIRONMENT = "development";
 var PRODUCTION_DATABASE_ENVIRONMENT = "production";
 
@@ -1198,6 +1211,24 @@ var SERVICE_ENV_ENVIRONMENTS = [
   DEVELOPMENT_DATABASE_ENVIRONMENT,
   PRODUCTION_DATABASE_ENVIRONMENT
 ];
+function normalizedRepositoryPath(path, field) {
+  const normalized = path.replace(/\\/g, "/").replace(/^\.\//, "").replace(/\/+$/, "");
+  if (!normalized || normalized.startsWith("/") || normalized.split("/").some((part) => !part || part === "." || part === "..")) {
+    throw new Error(`${field} must be a repository-relative path.`);
+  }
+  return normalized;
+}
+function joinRepositoryPath(left, right) {
+  return left ? `${left}/${right}` : right;
+}
+function serviceTargetRoot(target) {
+  if (target.kind === "manifest-service") {
+    return target.path ? normalizedRepositoryPath(target.path, `services.${target.name}.path`) : "";
+  }
+  const entry = normalizedRepositoryPath(target.entry, "frontend.entry");
+  const separator = entry.lastIndexOf("/");
+  return separator === -1 ? "" : entry.slice(0, separator);
+}
 function parseRepositoryServiceJson(path, raw) {
   let parsed;
   try {
@@ -1495,7 +1526,7 @@ function loadGuideFiles(root, appRoot) {
     guidePath(appRoot, "docs/SHOPPED-HOSTING.md"),
     guidePath(appRoot, "AGENTS.md"),
     guidePath(appRoot, "CLAUDE.md"),
-    ...appRoot ? ["AGENTS.md"] : []
+    ...appRoot ? ["AGENTS.md", "CLAUDE.md"] : []
   ]);
   for (const path of paths) {
     regularFile(root, path.split("/").slice(0, -1).join("/") || ".");
@@ -1526,25 +1557,31 @@ function checkRepoContract(root, manifestPath, emit) {
   guideRoot(manifestPath);
   const raw = readFileSync(regularFile(root, manifestPath), "utf8");
   const parsed = parseAppManifest(raw);
-  if (!parsed.ok) {
-    for (const finding of parsed.diagnostics) emit(`${finding.severity}: ${manifestPath} ${finding.path}: ${finding.message}`);
-    return 1;
-  }
+  for (const finding of parsed.diagnostics) emit(`${finding.severity}: ${manifestPath} ${finding.path} [${finding.code}]: ${finding.message}`);
+  if (!parsed.ok) return 1;
   const manifest = parsed.manifest;
   const manifestRoot = manifestPath.includes("/") ? manifestPath.slice(0, manifestPath.lastIndexOf("/")) : "";
-  const configs = new Set(Object.values(manifest.services).map((service) => guidePath(service.path, "service.json")));
+  const configs = new Set(Object.entries(manifest.services).map(([name, service]) => joinRepositoryPath(serviceTargetRoot({ kind: "manifest-service", name, path: service.path }), "service.json")));
   if (manifest.frontend.kind === "server") {
-    const entry = guidePath(manifestRoot, manifest.frontend.entry);
-    const serviceRoot = entry.includes("/") ? entry.slice(0, entry.lastIndexOf("/")) : "";
-    configs.add(guidePath(serviceRoot, "service.json"));
+    const serviceRoot = serviceTargetRoot({ kind: "server-frontend", name: "frontend", entry: manifest.frontend.entry });
+    const root2 = serviceRoot ? joinRepositoryPath(manifestRoot, serviceRoot) : manifestRoot;
+    configs.add(joinRepositoryPath(root2, "service.json"));
   }
   let errors = 0;
   for (const path of configs) {
     try {
       const bytes = readFileSync(regularFile(root, path), "utf8");
-      const rawConfig = JSON.parse(bytes);
-      const count = rawConfig?.env && typeof rawConfig.env === "object" && !Array.isArray(rawConfig.env) ? Object.keys(rawConfig.env).length : 0;
-      emit(`${path}: env entries ${count}/${MAX_SERVICE_ENV_ENTRIES}; room remaining ${MAX_SERVICE_ENV_ENTRIES - count}`);
+      let rawConfig;
+      try {
+        rawConfig = JSON.parse(bytes);
+      } catch {
+        throw new Error(`${path}: service.json is not valid JSON`);
+      }
+      if (rawConfig?.env === void 0) emit(`${path}: env block absent; existing runtime entries are preserved and unknown`);
+      else if (rawConfig.env && typeof rawConfig.env === "object" && !Array.isArray(rawConfig.env)) {
+        const count = Object.keys(rawConfig.env).length;
+        emit(`${path}: env entries ${count}/${MAX_SERVICE_ENV_ENTRIES}; room remaining ${MAX_SERVICE_ENV_ENTRIES - count}`);
+      } else emit(`${path}: invalid env block; count unavailable`);
       const config = parseRepositoryServiceJson(path, bytes);
       if (config.env) for (const environment of SERVICE_ENV_ENVIRONMENTS) {
         emit(`${path}: ${environment} entries ${Object.keys(serviceEnvForEnvironment(config.env, environment)).length}/${MAX_SERVICE_ENV_ENTRIES}`);

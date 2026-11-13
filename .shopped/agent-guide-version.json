@@ -1,14 +1,14 @@
 {
-  "version": 1,
-  "sourceSha": "9fceb60298d498eeccf3bf34ba0d99d81e64b380",
-  "digest": "20e42c627da048353cf84354874572ce73ad35b388568cdc6fb5ea4d301c7bed",
-  "contractDigest": "4ceb16063d4d4b95aae9d7de1e1b828f3157cf162b6057157817ff9997724a6b",
+  "version": 2,
+  "sourceSha": "31ab78828b8f124f2e511816fe04f4d8421a6cd6",
+  "digest": "8b9def3119bf6ff935bda3e4dedbdbec95736d9179d2c836a24b949c2637f30d",
+  "contractDigest": "e9142752133a38b10534f31ec5df4d8ea94ff3002a9e0e0d071b8f717f8a81a0",
   "managedFiles": {
     ".shopped/agent-guide.md": "7ed98d14c89af95bbb8509e8f77acc0db2d03004a54ffc8c76c755743bb20f6a",
     ".claude/skills/shopped-hosting/SKILL.md": "ca0800978204248d15d84d69ed88ad5076b4edac62e910bedf456d6a0d83285a"
   },
   "entryDigests": {
-    "AGENTS.md": "4bbd614d59dd112a1b81abb5656d74c27766de3bf6935678c9931730331efe1d",
-    "CLAUDE.md": "4bbd614d59dd112a1b81abb5656d74c27766de3bf6935678c9931730331efe1d"
+    "AGENTS.md": "7560f4996364c4faace68b59da86c801ec601eba16da8e62f42c6c1deced4fd4",
+    "CLAUDE.md": "7560f4996364c4faace68b59da86c801ec601eba16da8e62f42c6c1deced4fd4"
   }
 }
