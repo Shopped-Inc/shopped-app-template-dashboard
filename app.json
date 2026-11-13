@@ -41,7 +41,6 @@
     }
   },
   "database": {
-    "name": "dashboard-data",
-    "migrations": "database/migrations"
+    "name": "dashboard-data"
   }
 }
