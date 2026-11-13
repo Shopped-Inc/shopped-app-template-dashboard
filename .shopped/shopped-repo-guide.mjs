@@ -913,8 +913,8 @@ function parseAppManifest(input, options = {}) {
 var REPO_AGENT_GUIDE_BUNDLE = {
   "metadata": {
     "version": 3,
-    "sourceSha": "fb81347280ea2232be278a89a5c2e2a0da396b52",
-    "digest": "871c013b14857324348bdf74bd80bae1d4df509ca5c4725b1f6c3a8f458eb409",
+    "sourceSha": "5437492e590358d1375e633b7dd12462ace7cbc2",
+    "digest": "423904d649c7775744913a488df708e044338d994fac9d485d69aa5df60622cd",
     "contractDigest": "1819b9577269cb7cecf06ddcd613f7a6686382454bf2a430313364072b9195c3",
     "managedFiles": {
       ".shopped/agent-guide.md": "7c17dd47396d5b912c102d15f713689a36fa1173b8d770e2ca453ad7e4751c56",
